@@ -41,6 +41,11 @@ jobs:
 
       - name: Start NestJS app
         run: npm run start
+      
+      - name: Wait for 10 seconds
+        uses: GuillaumeFalourd/wait-sleep-action@v1
+        with:
+          time: '10s'
 
       - name: Change directory to e2e and create env file 
         run: |
