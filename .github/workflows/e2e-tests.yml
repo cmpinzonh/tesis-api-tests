@@ -47,12 +47,9 @@ jobs:
         with:
           time: '10s'
 
-      - name: Change directory to e2e and create env file 
+      - name: Run e2e tests
         run: |
           cd e2e/
           touch .env
           echo BASE_URL=${{ secrets.TEST_BASE_URL }} >> .env
-
-
-      - name: Run e2e tests
-        run: npm test
+          npm test
