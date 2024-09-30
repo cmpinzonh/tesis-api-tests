@@ -1,0 +1,27 @@
+name: Fancy Deployment
+
+on:
+  push:
+    branches: [ master ]
+jobs:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy application
+        env:
+          PRIVATE_KEY: ${{ secrets.SERVER_CERT }}
+          HOSTNAME : ${{ secrets.SERVER_HOSTNAME }}
+          USERNAME : ${{ secrets.SERVER_USERNAME }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+
+          cd /<path to your cloned github repository on the server> &&
+          git checkout main &&
+          git fetch --all &&
+          git reset --hard origin/main &&
+          git pull origin main &&
+          docker-compose up -d --build
+        '
